@@ -248,12 +248,26 @@ function buildAbout() {
       (s) => `<div class="skill" data-reveal><h4>${esc(s.title)}</h4><p>${esc(s.text)}</p></div>`
     )
     .join('');
+  // The scraper only captures the one photo actually used in this section on
+  // the live site (the dog), so that's the only fact that gets a real photo.
+  // The other facts never had a matching photo asset — on the live site
+  // they're plain text with no visual at all — so we give each a small,
+  // purpose-picked line icon rather than reusing an unrelated hero photo.
+  const factIcons = {
+    'Dual Citizen (UK & US)': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.4 2.5 3.6 5.8 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.8-3.6-9s1.2-6.5 3.6-9z"/></svg>`,
+    Music: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
+    Ideation: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.3h6c0-1.1.4-1.8 1-2.3A7 7 0 0 0 12 2z"/></svg>`,
+  };
   const factsHTML = d.funFacts
-    .map((f, idx) => {
-      const imgs = [d.images.top1, d.images.top2, d.images.dog, d.images.dog];
-      return `<div class="fact" data-reveal><img src="${img(imgs[idx] || d.images.top1, '..')}" alt="" loading="lazy" /><h4>${esc(
-        f.title
-      )}</h4><p>${esc(f.text)}</p></div>`;
+    .map((f) => {
+      const visual = /dog/i.test(f.title)
+        ? `<div class="fact__visual fact__visual--photo"><img src="${img(d.images.dog, '..')}" alt="" loading="lazy" /></div>`
+        : `<div class="fact__visual fact__visual--icon">${
+            factIcons[f.title] || factIcons.Ideation
+          }</div>`;
+      return `<div class="fact" data-reveal>${visual}<h4>${esc(f.title)}</h4><p>${esc(
+        f.text
+      )}</p></div>`;
     })
     .join('');
 
