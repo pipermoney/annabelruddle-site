@@ -57,17 +57,19 @@ function renderNav(prefix, currentHref) {
 function renderHeader(prefix, currentHref) {
   return `
 <header class="site-header">
-  <a class="site-header__logo" href="${prefix}/" aria-label="Annabel Ruddle — Home">
-    <img src="${prefix}${img(site.logo)}" alt="Annabel Ruddle" width="150" height="26" />
-  </a>
-  ${renderNav(prefix, currentHref)}
-  <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">
-    <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 1H22" stroke="black" stroke-width="1.6"/>
-      <path d="M0 8H22" stroke="black" stroke-width="1.6"/>
-      <path d="M0 15H22" stroke="black" stroke-width="1.6"/>
-    </svg>
-  </button>
+  <div class="site-header__inner">
+    <a class="site-header__logo" href="${prefix}/" aria-label="Annabel Ruddle — Home">
+      <img src="${prefix}${img(site.logo)}" alt="Annabel Ruddle" width="150" height="26" />
+    </a>
+    ${renderNav(prefix, currentHref)}
+    <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 1H22" stroke="black" stroke-width="1.6"/>
+        <path d="M0 8H22" stroke="black" stroke-width="1.6"/>
+        <path d="M0 15H22" stroke="black" stroke-width="1.6"/>
+      </svg>
+    </button>
+  </div>
 </header>`;
 }
 

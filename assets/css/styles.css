@@ -131,13 +131,30 @@ html.gate-unlocked .gate-overlay { display: none; }
    ============================================================ */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
   height: var(--header-h);
-  padding: 0 var(--gutter);
+  border-bottom: 1px solid var(--color-line-soft);
+}
+
+/* The frosted-glass background lives on a pseudo-element rather than on
+   .site-header itself, because backdrop-filter on an ancestor creates a new
+   containing block for `position: fixed` descendants (like the mobile nav
+   panel below), which would otherwise clip it to the header's own height. */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(14px) saturate(1.4);
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
-  border-bottom: 1px solid var(--color-line-soft);
+}
+
+.site-header__inner {
+  max-width: var(--max-w);
+  height: 100%;
+  margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--gutter);
 }
 
 .site-header__logo img { height: 26px; width: auto; }
