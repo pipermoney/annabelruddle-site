@@ -107,8 +107,9 @@ const GATE_EARLY_CHECK = `<script>
 })();
 </script>`;
 
-const GATE_OVERLAY_HTML = `
-<div class="gate-overlay" id="gate-overlay" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+function gateOverlayHTML(prefix) {
+  return `
+<div class="gate-overlay" id="gate-overlay" role="dialog" aria-modal="true" aria-labelledby="gate-title" style="background-image:url('${img(site.heroBg, prefix)}')">
   <form class="gate-form">
     <p class="gate-form__eyebrow" id="gate-title">This site is password protected</p>
     <label class="visually-hidden" for="gate-password">Password</label>
@@ -117,6 +118,7 @@ const GATE_OVERLAY_HTML = `
     <p class="gate-form__error" role="alert" hidden>Incorrect password. Please try again.</p>
   </form>
 </div>`;
+}
 
 function page({ prefix, currentHref, title, description, bodyClass, bodyHTML }) {
   return `<!DOCTYPE html>
@@ -133,7 +135,7 @@ ${GATE_EARLY_CHECK}
 <link rel="stylesheet" href="${prefix}/assets/css/styles.css" />
 </head>
 <body class="gate-locked ${bodyClass || ''}">
-${GATE_OVERLAY_HTML}
+${gateOverlayHTML(prefix)}
 ${renderHeader(prefix, currentHref)}
 <main id="page">
 ${bodyHTML}
