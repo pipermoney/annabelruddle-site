@@ -353,6 +353,8 @@ function renderContent(content, prefix) {
       html += `<p class="cs-block cs-block--quote" data-reveal>${esc(b.text)}</p>`;
     } else if (b.type === 'img') {
       html += `<figure class="cs-figure" data-reveal><img src="${img(b.src, prefix)}" alt="" loading="lazy" /></figure>`;
+    } else if (b.type === 'video') {
+      html += `<figure class="cs-figure" data-reveal><video src="${img(b.src, prefix)}" poster="${img(b.poster, prefix)}" controls playsinline preload="metadata"></video></figure>`;
     }
   });
   flushList();
@@ -468,6 +470,25 @@ function buildMedia() {
   const galleryHTML = d.imgs
     .map((src) => `<img src="${img(src, '..')}" alt="" loading="lazy" />`)
     .join('');
+  const afterGalleryHTML = (d.imgsAfterVideos || [])
+    .map((src) => `<img src="${img(src, '..')}" alt="" loading="lazy" />`)
+    .join('');
+  const nativeVideoHTML = d.video
+    ? `<figure class="cs-figure" data-reveal><video src="${img(d.video.src, '..')}" poster="${img(
+        d.video.poster,
+        '..'
+      )}" controls playsinline preload="metadata"></video></figure>`
+    : '';
+  const youtubeHTML = (d.youtubeVideos || [])
+    .map(
+      (v) => `
+  <figure class="cs-figure" data-reveal>
+    <div class="video-embed"><iframe src="https://www.youtube.com/embed/${esc(v.id)}" title="${esc(
+        v.title || ''
+      )}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+  </figure>`
+    )
+    .join('');
   const body = `
 <section class="section">
   <p class="eyebrow">Art</p>
@@ -475,6 +496,9 @@ function buildMedia() {
   <p class="cs-block" data-reveal>Short films, generative art, and photography.</p>
   <a class="resume-btn" href="https://www.annabelruddle.com${d.cvHref}">Artist & Exhibition CV →</a>
   <div class="gallery-grid" data-reveal>${galleryHTML}</div>
+  ${nativeVideoHTML}
+  ${youtubeHTML}
+  <div class="gallery-grid" data-reveal>${afterGalleryHTML}</div>
   <p class="cs-block" style="margin-top:24px" data-reveal>View more art at <a href="${d.artSiteHref}" style="text-decoration:underline">annabelruddle.art</a></p>
 </section>`;
   write(
