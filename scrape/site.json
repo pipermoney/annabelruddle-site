@@ -1,0 +1,36 @@
+{
+  "logo": "https://images.squarespace-cdn.com/content/v1/618840c3efab506702a40c99/e6057bf2-6078-472a-85c3-e36a14eb3620/logo-alt+colorway.png",
+  "heroBg": "https://images.squarespace-cdn.com/content/v1/618840c3efab506702a40c99/1636320729505-F3X5HHLGU6GON2LGR59D/BK-saturated.jpg",
+  "nav": {
+    "home": "/",
+    "work": [
+      {"text":"Education Framework","href":"/education"},
+      {"text":"Portfolio Management on Mobile","href":"/portfolio"},
+      {"text":"Enterprise Analytics Tool","href":"/enterprise"},
+      {"text":"AI Editor","href":"/aieditor"},
+      {"text":"Build Before Buy / Growth","href":"/bbb"},
+      {"text":"Misfits Market App","href":"/mapp"},
+      {"text":"Intranet","href":"/intranet"},
+      {"text":"Account & Dashboard","href":"/accountdashboard"},
+      {"text":"Subscription to Store","href":"/mstore"},
+      {"text":"Membership to Store","href":"/mstorex2"}
+    ],
+    "art": [
+      {"text":"Short Films & Generative Art","href":"/media"},
+      {"text":"Aesthetic Play","href":"/aestheticplay"}
+    ],
+    "about": "/about"
+  },
+  "footer": {
+    "workLinks": [
+      {"text":"AI Creator Toolset","href":"/aieditor"},
+      {"text":"Enterprise","href":"/enterprise"},
+      {"text":"Education Framework","href":"/education"},
+      {"text":"Portfolio Management","href":"/portfolio"}
+    ],
+    "copyright": "© Annabel Ruddle 2024",
+    "email": "annabel@annabelruddle.com"
+  },
+  "email": "annabel@annabelruddle.com",
+  "font": "Inter Tight"
+}
