@@ -94,12 +94,37 @@ function renderFooter(prefix) {
 </footer>`;
 }
 
+// Inline + synchronous so it runs (and sets the html class) before the
+// body — and the gate overlay inside it — is even parsed, avoiding any
+// flash of the gate on repeat visits within the same browser session.
+const GATE_EARLY_CHECK = `<script>
+(function () {
+  try {
+    if (sessionStorage.getItem('ar-gate-unlocked') === 'true') {
+      document.documentElement.classList.add('gate-unlocked');
+    }
+  } catch (e) {}
+})();
+</script>`;
+
+const GATE_OVERLAY_HTML = `
+<div class="gate-overlay" id="gate-overlay" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+  <form class="gate-form">
+    <p class="gate-form__eyebrow" id="gate-title">This site is password protected</p>
+    <label class="visually-hidden" for="gate-password">Password</label>
+    <input class="gate-form__input" id="gate-password" name="password" type="password" placeholder="Enter password" autocomplete="off" autofocus />
+    <button class="gate-form__submit" type="submit">Enter</button>
+    <p class="gate-form__error" role="alert" hidden>Incorrect password. Please try again.</p>
+  </form>
+</div>`;
+
 function page({ prefix, currentHref, title, description, bodyClass, bodyHTML }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+${GATE_EARLY_CHECK}
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -107,13 +132,15 @@ function page({ prefix, currentHref, title, description, bodyClass, bodyHTML }) 
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${prefix}/assets/css/styles.css" />
 </head>
-<body class="${bodyClass || ''}">
+<body class="gate-locked ${bodyClass || ''}">
+${GATE_OVERLAY_HTML}
 ${renderHeader(prefix, currentHref)}
 <main id="page">
 ${bodyHTML}
 </main>
 ${renderFooter(prefix)}
 <script src="${prefix}/assets/js/script.js"></script>
+<script src="${prefix}/assets/js/gate.js"></script>
 </body>
 </html>
 `;
