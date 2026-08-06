@@ -6,8 +6,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = __dirname;
-const SCRAPE = path.join(ROOT, 'scrape');
+const ROOT = path.join(__dirname, '..');
+const SCRAPE = path.join(__dirname, 'scrape');
 
 function readJSON(name) {
   return JSON.parse(fs.readFileSync(path.join(SCRAPE, name), 'utf8'));
@@ -105,7 +105,7 @@ function page({ prefix, currentHref, title, description, bodyClass, bodyHTML }) 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${prefix}/styles.css" />
+<link rel="stylesheet" href="${prefix}/assets/css/styles.css" />
 </head>
 <body class="${bodyClass || ''}">
 ${renderHeader(prefix, currentHref)}
@@ -113,7 +113,7 @@ ${renderHeader(prefix, currentHref)}
 ${bodyHTML}
 </main>
 ${renderFooter(prefix)}
-<script src="${prefix}/script.js"></script>
+<script src="${prefix}/assets/js/script.js"></script>
 </body>
 </html>
 `;
@@ -173,21 +173,21 @@ function buildHome() {
       <article class="work-item" data-reveal>
         <div class="work-item__text">
           <p class="work-item__client">${esc(it.client)}</p>
-          <a href="${it.href}/"><h3 class="work-item__title">${esc(it.title)}</h3></a>
+          <a href=".${it.href}/"><h3 class="work-item__title">${esc(it.title)}</h3></a>
           <p class="work-item__meta">${esc(it.meta)}</p>
         </div>
-        <a class="work-item__figure" href="${it.href}/" aria-label="${esc(it.title)}">
-          <img src="${img(it.img, '')}" alt="${esc(it.title)}" loading="lazy" />
+        <a class="work-item__figure" href=".${it.href}/" aria-label="${esc(it.title)}">
+          <img src="${img(it.img, '.')}" alt="${esc(it.title)}" loading="lazy" />
         </a>
       </article>`
         )
         .join('');
-      return `<div class="work-band" style="background-image:url('${img(bandItem.bg, '')}')">${itemsHTML}</div>`;
+      return `<div class="work-band" style="background-image:url('${img(bandItem.bg, '.')}')">${itemsHTML}</div>`;
     })
     .join('');
 
   const body = `
-<section class="hero" style="background-image:url('${img(heroBg, '')}')">
+<section class="hero" style="background-image:url('${img(heroBg, '.')}')">
   <div class="hero__inner">
     <h1>${heroTitleHTML}</h1>
     <p class="hero__email"><a href="mailto:${heroEmail}">${esc(heroEmail)}</a></p>
@@ -198,7 +198,7 @@ ${bandsHTML}`;
   write(
     'index.html',
     page({
-      prefix: '',
+      prefix: '.',
       currentHref: '/',
       title: 'Annabel Ruddle',
       description: 'Annabel Ruddle is a Senior Product Designer based in Brooklyn, NY.',
@@ -489,11 +489,11 @@ function build404() {
 <section class="section section--narrow" style="min-height:50vh">
   <p class="eyebrow">404</p>
   <h1 class="cs-block">We couldn't find the page you were looking for.</h1>
-  <p class="cs-block" data-reveal>Please check the URL, or head back to the <a href="/" style="text-decoration:underline">homepage</a>.</p>
+  <p class="cs-block" data-reveal>Please check the URL, or head back to the <a href="./" style="text-decoration:underline">homepage</a>.</p>
 </section>`;
   write(
     '404.html',
-    page({ prefix: '', currentHref: '', title: 'Not Found — Annabel Ruddle', description: 'Page not found', bodyHTML: body })
+    page({ prefix: '.', currentHref: '', title: 'Not Found — Annabel Ruddle', description: 'Page not found', bodyHTML: body })
   );
 }
 
