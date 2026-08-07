@@ -292,8 +292,8 @@ html.gate-unlocked .gate-overlay { display: none; }
   min-height: 78vh;
 }
 
-.work-item:nth-child(even) { direction: rtl; }
-.work-item:nth-child(even) > * { direction: ltr; }
+/* Text stays on the left and the image on the right for every row on the
+   live site — it never alternates sides, so no nth-child mirroring here. */
 
 .work-item__client {
   font-size: 15px; font-weight: 600; color: var(--color-ink-soft);
@@ -328,8 +328,8 @@ html.gate-unlocked .gate-overlay { display: none; }
 }
 
 @media (max-width: 900px) {
-  .work-item, .work-item:nth-child(even) {
-    grid-template-columns: 1fr; direction: ltr; min-height: 0;
+  .work-item {
+    grid-template-columns: 1fr; min-height: 0;
     padding: var(--space-xl) var(--gutter);
     gap: var(--space-lg);
   }
@@ -358,23 +358,25 @@ html.gate-unlocked .gate-overlay { display: none; }
   position: relative;
   padding: var(--space-2xl) var(--gutter) var(--space-xl);
   background-size: cover; background-position: center;
-  display: grid; grid-template-columns: 1.2fr 0.8fr; gap: var(--space-2xl);
+  display: grid; grid-template-columns: 0.8fr 1.2fr; gap: var(--space-2xl);
   align-items: center;
 }
 
+/* Photo sits on the left as a circular crop, matching the live site. */
 .about-hero__photo img {
-  width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius-md);
+  width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 50%;
   box-shadow: 0 40px 90px -30px rgba(12,12,12,0.35);
 }
 
 .about-hero h1 { font-size: clamp(30px, 4vw, 52px); font-weight: 500; line-height: 1.15; }
 .about-hero h1 strong { font-weight: 700; }
 .about-hero p { margin-top: var(--space-lg); font-size: 18px; line-height: 1.6; color: var(--color-ink-soft); max-width: 52ch; }
+.about-hero .signature { font-weight: 700; color: var(--color-ink); }
 .about-hero .flags { margin-top: var(--space-lg); font-size: 28px; }
 
 @media (max-width: 860px) {
   .about-hero { grid-template-columns: 1fr; }
-  .about-hero__photo { order: -1; max-width: 320px; }
+  .about-hero__photo { max-width: 220px; margin: 0 auto; }
 }
 
 .skills-grid {
@@ -477,12 +479,15 @@ html.gate-unlocked .gate-overlay { display: none; }
   content: ""; position: absolute; left: 0; top: 10px; width: 6px; height: 6px;
   border-radius: 50%; background: var(--color-ink);
 }
-.cs-content figure.cs-figure { margin: var(--space-sm) 0; }
-.cs-content figure.cs-figure img,
-.cs-content figure.cs-figure video {
+/* Not scoped to .cs-content — figure.cs-figure is reused directly inside
+   .section on the Art pages too, and needs the same responsive sizing there
+   (otherwise a <video> renders at its native pixel width and overflows). */
+figure.cs-figure { margin: var(--space-sm) 0; }
+figure.cs-figure img,
+figure.cs-figure video {
   width: 100%; border-radius: var(--radius-md); border: 1px solid var(--color-line-soft);
 }
-.cs-content figure.cs-figure video { display: block; background: #000; }
+figure.cs-figure video { display: block; background: #000; }
 .video-embed {
   position: relative; width: 100%; aspect-ratio: 16/9;
   border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-line-soft);
@@ -499,13 +504,15 @@ html.gate-unlocked .gate-overlay { display: none; }
 /* ============================================================
    Art / gallery pages
    ============================================================ */
+/* Two-column masonry (not a fixed-height crop grid) — the live site shows
+   every gallery photo at its natural aspect ratio, with columns flowing
+   independently, so images are never cropped/square-forced like a tiled grid. */
 .gallery-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm);
+  column-count: 2; column-gap: var(--space-sm);
   margin-top: var(--space-lg);
 }
-@media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .gallery-grid { grid-template-columns: 1fr; } }
-.gallery-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); aspect-ratio: 4/3; }
+@media (max-width: 560px) { .gallery-grid { column-count: 1; } }
+.gallery-grid img { width: 100%; display: block; border-radius: var(--radius-sm); margin-bottom: var(--space-sm); break-inside: avoid; }
 
 /* ============================================================
    Footer
