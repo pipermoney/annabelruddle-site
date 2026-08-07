@@ -273,15 +273,16 @@ function buildAbout() {
 
   const body = `
 <section class="about-hero" style="background-image:url('${img(d.images.top1, '..')}')">
+  <div class="about-hero__photo">
+    <img src="${img(d.images.headshot, '..')}" alt="Annabel Ruddle" loading="lazy" />
+  </div>
   <div>
     <p class="eyebrow">About</p>
     <h1>${esc(d.heading)}</h1>
     <p>${esc(d.intro)}</p>
+    <p class="signature">${esc(d.signature)}</p>
     <p class="flags">${d.flags}</p>
     <a class="resume-btn" href="https://www.annabelruddle.com${d.resumeHref}">Download Resume →</a>
-  </div>
-  <div class="about-hero__photo">
-    <img src="${img(d.images.headshot, '..')}" alt="Annabel Ruddle" loading="lazy" />
   </div>
 </section>
 <section class="section">
@@ -369,6 +370,8 @@ function renderContent(content, prefix) {
       html += `<figure class="cs-figure" data-reveal><img src="${img(b.src, prefix)}" alt="" loading="lazy" /></figure>`;
     } else if (b.type === 'video') {
       html += `<figure class="cs-figure" data-reveal><video src="${img(b.src, prefix)}" poster="${img(b.poster, prefix)}" controls playsinline preload="metadata"></video></figure>`;
+    } else if (b.type === 'youtube') {
+      html += `<figure class="cs-figure" data-reveal><div class="video-embed"><iframe src="https://www.youtube.com/embed/${esc(b.id)}" title="${esc(b.title || '')}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></figure>`;
     }
   });
   flushList();
