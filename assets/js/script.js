@@ -9,19 +9,59 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  function closeAllDropdowns() {
+    document.querySelectorAll('.site-nav__item.is-open').forEach(function (i) { i.classList.remove('is-open'); });
+  }
+
+  // Desktop dropdown panels use position: fixed (see styles.css) so their
+  // coordinates are set here in viewport space, anchored to the trigger
+  // button's current position rather than left to CSS containing-block
+  // rules that can vary across browsers/ancestors.
+  function positionDropdown(trigger, dropdown) {
+    if (getComputedStyle(dropdown).position !== 'fixed') return;
+    var r = trigger.getBoundingClientRect();
+    var width = dropdown.offsetWidth || 260;
+    var left = Math.min(r.right - width, window.innerWidth - width - 12);
+    left = Math.max(12, left);
+    dropdown.style.left = left + 'px';
+    dropdown.style.top = (r.bottom + 14) + 'px';
+  }
+
   document.querySelectorAll('.site-nav__item').forEach(function (item) {
     var trigger = item.querySelector('button');
-    if (!trigger) return;
+    var dropdown = item.querySelector('.site-nav__dropdown');
+    if (!trigger || !dropdown) return;
     trigger.addEventListener('click', function (e) {
       e.stopPropagation();
       var wasOpen = item.classList.contains('is-open');
-      document.querySelectorAll('.site-nav__item.is-open').forEach(function (i) { i.classList.remove('is-open'); });
-      if (!wasOpen) item.classList.add('is-open');
+      closeAllDropdowns();
+      if (!wasOpen) {
+        positionDropdown(trigger, dropdown);
+        item.classList.add('is-open');
+        trigger.setAttribute('aria-expanded', 'true');
+      } else {
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+    window.addEventListener('resize', function () {
+      if (item.classList.contains('is-open')) positionDropdown(trigger, dropdown);
     });
   });
 
   document.addEventListener('click', function () {
-    document.querySelectorAll('.site-nav__item.is-open').forEach(function (i) { i.classList.remove('is-open'); });
+    closeAllDropdowns();
+    document.querySelectorAll('.site-nav__item button[aria-expanded="true"]').forEach(function (b) {
+      b.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      closeAllDropdowns();
+      document.querySelectorAll('.site-nav__item button[aria-expanded="true"]').forEach(function (b) {
+        b.setAttribute('aria-expanded', 'false');
+      });
+    }
   });
 
   // Scroll reveal
